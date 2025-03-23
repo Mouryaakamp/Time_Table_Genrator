@@ -76,6 +76,7 @@
         function submitForm() {
             // 4th Semester code
             let subjects4 = [];
+
             let table4 = Array.from({ length: 5 }, () => new Array(6).fill(""));
 
             for (let i = 1; i <= 10; i++) {
@@ -89,11 +90,11 @@
                 }
             }
 
-            // Select lab subjects with credits = 4 for 4th semester
+            // Select lab subjects with credits = 4 for 4th semester 
             let labSubjects4 = subjects4.filter(subject => subject.credits == 4);
             console.log(labSubjects4);
 
-            // Adding classes according to the credits for 4th semester
+            // Adding classes according to the credits for 4th semester 
             let schedule4 = [];
             subjects4.forEach(subject => {
                 for (let i = 0; i < Math.min(3, subject.credits); i++) {
@@ -110,6 +111,7 @@
             }
 
             let ran_num = Array.from(uniqueNumbers);
+
             console.log(uniqueNumbers);
             console.log(ran_num);
 
@@ -145,7 +147,9 @@
                     teacher: document.getElementById(`teacher6_${i}`).value,
                     credits: Number(document.getElementById(`credits6_${i}`).value)
                 };
-                subjects6.push(subject6);
+                if (subject6.course !== "" && subject6.teacher !== "" && subject6.credits !== "") {
+                    subjects6.push(subject6);
+                }
             }
 
             // Select lab subjects with credits = 4 for 6th semester
@@ -159,6 +163,7 @@
                 }
             });
             console.log("Schedule 6:", schedule6);
+
 
             // Output part
             let outputText = "<strong>4th Semester:</strong><br>";
