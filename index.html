@@ -74,12 +74,9 @@
 
     <script>
         function submitForm() {
+            // 4th Semester code
             let subjects4 = [];
-            let subjects6 = [];
-
-
             let table4 = Array.from({ length: 5 }, () => new Array(6).fill(""));
-            let table6 = Array.from({ length: 5 }, () => new Array(6).fill(""));
 
             for (let i = 1; i <= 10; i++) {
                 let subject4 = {
@@ -92,38 +89,18 @@
                 }
             }
 
-            for (let i = 1; i <= 10; i++) {
-                let subject6 = {
-                    course: document.getElementById(`course6_${i}`).value,
-                    teacher: document.getElementById(`teacher6_${i}`).value,
-                    credits: Number(document.getElementById(`credits6_${i}`).value)
-                };
-                subjects6.push(subject6);
-            }
-
-            // Select lab subjects with credits = 4
+            // Select lab subjects with credits = 4 for 4th semester
             let labSubjects4 = subjects4.filter(subject => subject.credits == 4);
-            let labSubjects6 = subjects6.filter(subject => subject.credits == 4);
             console.log(labSubjects4);
 
-            //adding classes according to the cridits
+            // Adding classes according to the credits for 4th semester
             let schedule4 = [];
-            let schedule6 = [];
-
             subjects4.forEach(subject => {
                 for (let i = 0; i < Math.min(3, subject.credits); i++) {
                     schedule4.push(subject);
                 }
             });
-
-            subjects6.forEach(subject => {
-                for (let i = 0; i < Math.min(3, subject.credits); i++) {
-                    schedule6.push(subject);
-                }
-            });
-
             console.log("Schedule 4:", schedule4);
-            console.log("Schedule 6:", schedule6);
 
             // Randomizing subjects for Monday schedule
             let uniqueNumbers = new Set();
@@ -133,7 +110,7 @@
             }
 
             let ran_num = Array.from(uniqueNumbers);
-            console.log(uniqueNumbers)
+            console.log(uniqueNumbers);
             console.log(ran_num);
 
             // Fill Monday (table4[0]) with subjects
@@ -141,7 +118,6 @@
                 table4[0][i] = subjects4[ran_num[i]]
                     ? `${subjects4[ran_num[i]].course} - ${subjects4[ran_num[i]].teacher} (${subjects4[ran_num[i]].credits} credits)`
                     : "";
-
             }
 
             // Assign labs to periods 4 and 5
@@ -151,7 +127,7 @@
                 table4[0][4] += `${labSubjects4[i].course} Lab - ${labSubjects4[i].teacher} (4 credits)`;
                 if (i < 2) table4[0][4] += ", ";
             }
-            table4[0][5] = table4[0][4]; // Copy same value for both periods
+            table4[0][5] = table4[0][4];
 
             // If no lab subjects are available, assign default lab
             if (labSubjects4.length === 0) {
@@ -159,7 +135,32 @@
                 table4[0][5] = "Lab (4 credits)";
             }
 
+            // 6th Semester code
+            let subjects6 = [];
+            let table6 = Array.from({ length: 5 }, () => new Array(6).fill(""));
 
+            for (let i = 1; i <= 10; i++) {
+                let subject6 = {
+                    course: document.getElementById(`course6_${i}`).value,
+                    teacher: document.getElementById(`teacher6_${i}`).value,
+                    credits: Number(document.getElementById(`credits6_${i}`).value)
+                };
+                subjects6.push(subject6);
+            }
+
+            // Select lab subjects with credits = 4 for 6th semester
+            let labSubjects6 = subjects6.filter(subject => subject.credits == 4);
+
+            // Adding classes according to the credits for 6th semester
+            let schedule6 = [];
+            subjects6.forEach(subject => {
+                for (let i = 0; i < Math.min(3, subject.credits); i++) {
+                    schedule6.push(subject);
+                }
+            });
+            console.log("Schedule 6:", schedule6);
+
+            // Output part
             let outputText = "<strong>4th Semester:</strong><br>";
             subjects4.forEach((subject, index) => {
                 outputText += `${index + 1}. ${subject.course} - ${subject.teacher} (${subject.credits} credits)<br>`;
