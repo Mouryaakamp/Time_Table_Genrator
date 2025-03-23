@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Semester Course Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        .semester {
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        th,
+        td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+    </style>
+</head>
+
+<body>
+    <h2>4th Semester</h2>
+    <table>
+        <tr>
+            <th>Course Name</th>
+            <th>Course Teacher</th>
+            <th>Number of Credits</th>
+        </tr>
+        <script>
+            for (let i = 1; i <= 10; i++) {
+                document.write(`<tr>
+                    <td><input type='text' id='course4_${i}'></td>
+                    <td><input type='text' id='teacher4_${i}'></td>
+                    <td><input type='number' id='credits4_${i}'></td>
+                </tr>`);
+            }
+        </script>
+    </table>
+
+    <h2>6th Semester</h2>
+    <table>
+        <tr>
+            <th>Course Name</th>
+            <th>Course Teacher</th>
+            <th>Number of Credits</th>
+        </tr>
+        <script>
+            for (let i = 1; i <= 10; i++) {
+                document.write(`<tr>
+                    <td><input type='text' id='course6_${i}'></td>
+                    <td><input type='text' id='teacher6_${i}'></td>
+                    <td><input type='number' id='credits6_${i}'></td>
+                </tr>`);
+            }
+        </script>
+    </table>
+
+    <button onclick="submitForm()">Submit</button>
+
+    <h3>Entered Data:</h3>
+    <p id="output"></p>
+
+    <script>
+        function submitForm() {
+            let subjects4 = [];
+            let subjects6 = [];
+
+           
+            let table4 = Array.from({ length: 5 }, () => new Array(6).fill(""));
+            let table6 = Array.from({ length: 5 }, () => new Array(6).fill(""));
+
+            for (let i = 1; i <= 10; i++) {
+                let subject4 = {
+                    course: document.getElementById(`course4_${i}`).value,
+                    teacher: document.getElementById(`teacher4_${i}`).value,
+                    credits: Number(document.getElementById(`credits4_${i}`).value)
+                };
+                subjects4.push(subject4);
+            }
+
+            for (let i = 1; i <= 10; i++) {
+                let subject6 = {
+                    course: document.getElementById(`course6_${i}`).value,
+                    teacher: document.getElementById(`teacher6_${i}`).value,
+                    credits: Number(document.getElementById(`credits6_${i}`).value)
+                };
+                subjects6.push(subject6);
+            }
+
+            // Select lab subjects with credits = 4
+            let labSubjects4 = subjects4.filter(subject => subject.credits == 4);
+            let labSubjects6 = subjects6.filter(subject => subject.credits == 4);
+            console.log(labSubjects4);
+
+            // Randomizing subjects for Monday schedule
+            let uniqueNumbers = new Set();
+            while (uniqueNumbers.size < subjects4.length) {
+                let randomNum = Math.floor(Math.random() * subjects4.length);
+                uniqueNumbers.add(randomNum);
+            }
+
+            let ran_num = Array.from(uniqueNumbers);
+
+            // Fill Monday (table4[0]) with subjects
+            for (let i = 0; i < 4; i++) {
+                table4[0][i] = subjects4[ran_num[i]]
+                    ? `${subjects4[ran_num[i]].course} - ${subjects4[ran_num[i]].teacher} (${subjects4[ran_num[i]].credits} credits)`
+                    : "";
+            }
+
+            // Assign labs to periods 4 and 5
+            table4[0][4] = "";
+            table4[0][5] = "";
+            for (let i = 0; i < Math.min(3, labSubjects4.length); i++) {
+                table4[0][4] += `${labSubjects4[i].course} Lab - ${labSubjects4[i].teacher} (4 credits)`;
+                if (i < 2) table4[0][4] += ", "; 
+            }
+            table4[0][5] = table4[0][4]; // Copy same value for both periods
+
+            // If no lab subjects are available, assign default lab
+            if (labSubjects4.length === 0) {
+                table4[0][4] = "Lab (4 credits)";
+                table4[0][5] = "Lab (4 credits)";
+            }
+
+
+            let outputText = "<strong>4th Semester:</strong><br>";
+            subjects4.forEach((subject, index) => {
+                outputText += `${index + 1}. ${subject.course} - ${subject.teacher} (${subject.credits} credits)<br>`;
+            });
+
+            outputText += "<br><strong>6th Semester:</strong><br>";
+            subjects6.forEach((subject, index) => {
+                outputText += `${index + 1}. ${subject.course} - ${subject.teacher} (${subject.credits} credits)<br>`;
+            });
+
+            outputText += "<br><strong>Monday 4th Semester Schedule:</strong><br>";
+            table4[0].forEach((subject, index) => {
+                outputText += `${index + 1}. ${subject}<br>`;
+            });
+
+            document.getElementById('output').innerHTML = outputText;
+            console.log("Subjects 4:", subjects4);
+            console.log("Subjects 6:", subjects6);
+            console.log("Time Table 4 ", table4);
+            console.log("Time Table 6 ", table6);
+        }
+    </script>
+</body>
+
+</html>
