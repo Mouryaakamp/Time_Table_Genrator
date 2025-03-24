@@ -73,6 +73,22 @@
     <h3>Entered Data:</h3>
     <p id="output"></p>
 
+    <h3>Final Timetable (4th Semester):</h3>
+    <table id="finalTT">
+        <thead>
+            <tr>
+                <th>Day</th>
+                <th>Period 1</th>
+                <th>Period 2</th>
+                <th>Period 3</th>
+                <th>Period 4</th>
+                <th>Period 5</th>
+                <th>Period 6</th>
+            </tr>
+        </thead>
+        <tbody id="finalTTBody"></tbody>
+    </table>
+    <button id="download_to_exel">export to exel</button>
     <script>
         function submitForm() {
             // 4th Semester code
@@ -139,7 +155,7 @@
 
             console.log("Check lab ", table4);
 
-           
+
             let count = 0;
 
             for (let day = 0; day < 5; day++) {
@@ -204,6 +220,22 @@
                 }
             }
 
+
+            // Populate the finalTT table
+            let finalTTBody = document.getElementById("finalTTBody");
+            finalTTBody.innerHTML = ""; // Clear previous data
+
+            let days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
+            for (let day = 0; day < 5; day++) {
+                let row = `<tr><td>${days[day]}</td>`;
+                for (let period = 0; period < 6; period++) {
+                    row += `<td>${table4[day][period] || "Free"}</td>`;
+                }
+                row += `</tr>`;
+                finalTTBody.innerHTML += row;
+            }
+
+
             // 6th Semester code
             let subjects6 = [];
             let table6 = Array.from({ length: 5 }, () => new Array(6).fill(""));
@@ -254,6 +286,11 @@
             console.log("Time Table 4 ", table4);
             console.log("Time Table 6 ", table6);
         }
+
+        document.getElementById("download_to_exel").addEventListener('click', function () {
+            var table2excel = new Table2Excel();
+            table2excel.export(document.querySelectorAll("#finalTT"));
+        });
     </script>
 </body>
 
