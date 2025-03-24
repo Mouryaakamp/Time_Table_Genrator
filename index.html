@@ -160,62 +160,32 @@
 
             for (let day = 0; day < 5; day++) {
                 // Keep track of subjects used on the current day
-                let subjectsUsedToday = [];
-
                 for (let period = 0; period < 4; period++) {
-                    if (count >= schedule4.length) {
+                    // Ensure we have subjects left to assign
+                    if (ran_num.length === 0) {
+                        console.log("No more subjects available to assign.");
+                        break; // Exit if there are no subjects left
+                    }
+
+                    // Reset count if it exceeds the available subjects
+                    if (count >= ran_num.length) {
                         count = 0;
                     }
-                    let selectedSubject = schedule4[ran_num[count]];
 
-                    // Check if this subject is already used today
-                    while (subjectsUsedToday.includes(selectedSubject.course)) {
-                        count++;
-                        if (count >= schedule4.length) {
-                            count = 0;
-                        }
-                        selectedSubject = schedule4[ran_num[count]];
-                    }
+                    let selectedIndex = ran_num[count];
+                    let selectedSubject = schedule4[selectedIndex];
 
-                    if (day == 0) {
-                        table4[day][period] = selectedSubject.course + " - " + selectedSubject.teacher;
+                    // Check if it's the first day or if the subject can be assigned
+                    if (day === 0 || (period === 0 || (table4[day][period - 1].teacher !== selectedSubject.teacher && table4[day][period - 1].course !== selectedSubject.course))) {
+                        table4[day][period] = selectedSubject.course+"-"+selectedSubject.teacher; // Assign the subject
+                        ran_num.splice(count, 1); // Remove the assigned subject from ran_num
                     } else {
-                        // Extract the previous day's teacher
-                        let prevDayTeacherInfo = table4[day - 1][period].split(" - ")[1];
-
-                        if (prevDayTeacherInfo !== selectedSubject.teacher) {
-                            table4[day][period] = selectedSubject.course + " - " + selectedSubject.teacher;
-                        } else {
-                            // Find another subject with a different teacher
-                            let foundValid = false;
-                            let initialCount = count;
-
-                            while (!foundValid) {
-                                count++;
-                                if (count >= schedule4.length) {
-                                    count = 0;
-                                }
-
-                                // Prevent infinite loop if no solution exists
-                                if (count === initialCount) {
-                                    break;
-                                }
-
-                                selectedSubject = schedule4[ran_num[count]];
-
-                                // Check if this subject is already used today and teacher is different
-                                if (!subjectsUsedToday.includes(selectedSubject.course) &&
-                                    prevDayTeacherInfo !== selectedSubject.teacher) {
-                                    foundValid = true;
-                                }
-                            }
-
-                            table4[day][period] = selectedSubject.course + " - " + selectedSubject.teacher;
-                        }
+                        // If the subject cannot be assigned, skip to the next one
+                        count++;
+                        continue; // Skip to the next iteration
                     }
 
-                    // Add the selected subject to the used subjects for today
-                    subjectsUsedToday.push(selectedSubject.course);
+                    // Move to the next subject
                     count++;
                 }
             }
